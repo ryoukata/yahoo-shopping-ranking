@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import logger from 'redux-logger';
+import { Provider } from 'react-redux';
 import App from './App';
+import * as reducers from './reducers';
 import * as serviceWorker from './serviceWorker';
 
+// Storeの生成
+const store = createStore(
+  // １つのReducerで完結することはほぼ無いため、最初からcombineReducersを使う実装にしておく
+  combineReducers(reducers),
+  // Redux Middlewareにredux-loggerを設定
+  applyMiddleware(logger)
+);
+
 ReactDOM.render(
-  <React.StrictMode>
+  // StoreをAppコンポーネントに紐付け
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
